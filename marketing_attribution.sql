@@ -73,3 +73,38 @@ GROUP BY
     2
 ORDER BY
     3 DESC;
+
+-- #4 the number of last touches is each campaign
+WITH
+    last_touch AS (
+        SELECT
+            user_id,
+            MAX(timestamp) AS 'last_touch_at'
+        FROM
+            page_visits
+        GROUP BY
+            1
+    ),
+    lt_atrr AS (
+        SELECT
+            lt.user_id,
+            lt.last_touch_at,
+            pv.utm_campaign,
+            pv.utm_source,
+            pv.page_name
+        FROM
+            last_touch AS 'lt'
+            JOIN page_visits AS 'pv' ON lt.user_id = pv.user_id
+            AND lt.last_touch_at = pv.timestamp
+    )
+SELECT
+    lt_atrr.utm_campaign,
+    lt_atrr.utm_source,
+    COUNT(*)
+FROM
+    lt_atrr
+GROUP BY
+    1,
+    2
+ORDER BY
+    3 DESC;
