@@ -108,3 +108,11 @@ GROUP BY
     2
 ORDER BY
     3 DESC;
+
+-- #5 count visitors making a purchase
+SELECT
+    COUNT(DISTINCT (user_id)) AS 'count_purchase'
+FROM
+    page_visits
+WHERE
+    page_name = '4 - purchase';
